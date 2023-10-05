@@ -4,6 +4,7 @@
 
 /mongo
 mongo/
+.env
 
 # Logs
 logs
