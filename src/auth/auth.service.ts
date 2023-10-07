@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
@@ -8,6 +8,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 
 import { User } from './entities/user.entity';
+import { LoginDto } from './dto/login.dto';
+
 
 
 @Injectable()
@@ -45,6 +47,7 @@ export class AuthService {
       return user;
 
       // 1 Generar el JWT
+      // Eso en la autenticacion de usuario
 
     } catch (error) {
       if (error.code === 11000){
@@ -53,8 +56,28 @@ export class AuthService {
 
       throw new InternalServerErrorException('No se logro insertar el nuevo registro')
     }
+  }
 
+  async login(loginDto:LoginDto){
 
+    const {email, password} = loginDto;
+
+    // Ver si existe el usuario
+    const user = await this.userModel.findOne({email});
+    if ( !user ){
+      throw new UnauthorizedException('Correo no valido')
+    }
+    if( !bcryptjs.compareSync(password, user.password) ){
+      throw new UnauthorizedException('contraseña no valida')
+    }
+
+    // return 'Iniciaste sesion'
+
+    const { password:_, ...rest} = user.toJSON();
+    return{
+      user: rest,
+      token: 'Lo que sea aun'
+    }
   }
 
   findAll() {
