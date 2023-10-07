@@ -9,7 +9,7 @@ export class User {
     email: string;
 
     @Prop({required:true})
-    nameL:string;
+    name:string;
 
     @Prop({minlength:6, required:true})
     password:string;
