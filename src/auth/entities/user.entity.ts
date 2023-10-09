@@ -5,6 +5,9 @@ export class User {
     // Para ver como lucen los usuarios. Colocarle a todos prop y indicar parametros o reglas
 
     // _id:string => esto lo hace mongo automaticcamente. 
+
+    _id?:string;
+
     @Prop({ unique: true, required: true})
     email: string;
 
