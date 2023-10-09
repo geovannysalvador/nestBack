@@ -9,6 +9,8 @@ import { UpdateAuthDto } from './dto/update-auth.dto';
 
 import { User } from './entities/user.entity';
 import { LoginDto } from './dto/login.dto';
+import { JwtService } from '@nestjs/jwt';
+import { JwtPayload } from './interfaces/jwt-payload';
 
 
 
@@ -18,6 +20,7 @@ export class AuthService {
   constructor(
     @InjectModel(User.name) 
     private userModel: Model<User>,
+    private jwtService: JwtService
   ){}
 
 
@@ -42,7 +45,6 @@ export class AuthService {
       await newUser.save();
       // mostrar toda la info sin mostrar el password por que no es necesario
       const { password:_, ...user } = newUser.toJSON();
-
 
       return user;
 
@@ -76,8 +78,14 @@ export class AuthService {
     const { password:_, ...rest} = user.toJSON();
     return{
       user: rest,
-      token: 'Lo que sea aun'
+      // token: 'Lo que sea aun'
+      token: this.getJwToken({ id: user.id }),
     }
+  }
+
+  getJwToken( payload:JwtPayload ){
+    const token = this.jwtService.sign(payload);
+    return token;
   }
 
   findAll() {
