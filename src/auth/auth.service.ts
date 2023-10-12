@@ -106,6 +106,14 @@ export class AuthService {
     return this.userModel.find();
   }
 
+  // Obtener por Id
+  async findUserById(userId:string){
+    const user = await this.userModel.findById(userId);
+    const {password, ...rest} = user.toJSON();
+
+    return rest;
+  }
+
   findOne(id: number) {
     return `This action returns a #${id} auth`;
   }
