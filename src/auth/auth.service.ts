@@ -65,7 +65,7 @@ export class AuthService {
   async register( registerDto:RegisterUserDto ):Promise<LoginResponse>{
 
     const user = await this.create(registerDto)
-    console.log({user});
+    // console.log({user});
 
     return{
       user: user,
@@ -91,7 +91,7 @@ export class AuthService {
     const { password:_, ...rest} = user.toJSON();
     return{
       user: rest,
-      // token: 'Lo que sea aun'
+      // token: 'Mandar el Token'
       token: this.getJwToken({ id: user.id }),
     }
   }
@@ -101,8 +101,9 @@ export class AuthService {
     return token;
   }
 
-  findAll() {
-    return `This action returns all auth`;
+  findAll():Promise<User[]> {
+    // Regresar todos los usuaruos
+    return this.userModel.find();
   }
 
   findOne(id: number) {
