@@ -5,6 +5,9 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  // habilitar cors para evitar errores de peticiones externas al back
+  app.enableCors();
   
   // Pipe global. Restricciones para mandar la info como espera
   app.useGlobalPipes(
