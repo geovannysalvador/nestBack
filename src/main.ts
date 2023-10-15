@@ -17,7 +17,8 @@ async function bootstrap() {
     })
     );
 
-    await app.listen(3000);
+    // Cambiar el puerto por que lo da el servicio en la nube  y ya no sera 3000 sino va a variar 
+    await app.listen(process.env.PORT ?? 3000);
 
 }
 bootstrap();
